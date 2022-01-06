@@ -1,1 +1,1 @@
-web: gunicorn URLSS.wsgi --log-file - -
+web: gunicorn URLSS.wsgi --log-file -
