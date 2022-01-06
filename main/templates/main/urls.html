@@ -14,8 +14,12 @@
         <tbody>
         {% for url in urls %}
             <tr>
-                <td class="table-dark">{{ url.shorted_url }}</td>
-                <td class="table-dark">{{ url.full_url }}</td>
+                <td class="table-dark">
+                    <a href="{{ request.scheme }}://{{ request.get_host }}/{{ url.shorted_url }}">{{ url.shorted_url }}</a>
+                </td>
+                <td class="table-dark">
+                    <a href="{{ url.full_url }}">{{ url.full_url }}</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
