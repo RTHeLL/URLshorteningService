@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Создание короткой ссылки {% endblock %}
+
+{% block content %}
+    <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 fw-normal text-center">Создание ссылки</h1>
+
+        <div class="form-floating mb-3">
+            {{ form.full_url }}
+            <label class="form-label" for="{{ form.full_url.id_for_label }}">{{ form.full_url.label }}</label>
+        </div>
+
+        <div class="alerts alert-danger text-center">
+            {{ form.full_url.errors }}
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="text-center mb-3">
+                    <a href="{{ message }}" class="alert-link">{{ message }}</a>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Сократить</button>
+    </form>
+{% endblock %}

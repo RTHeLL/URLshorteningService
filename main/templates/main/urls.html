@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% block title %} Все ваши ссылки {% endblock %}
+
+{% block content %}
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Сокращенная</th>
+            <th scope="col">Полная</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for url in urls %}
+            <tr>
+                <td class="table-dark">{{ url.shorted_url }}</td>
+                <td class="table-dark">{{ url.full_url }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
