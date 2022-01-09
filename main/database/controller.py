@@ -1,9 +1,8 @@
 from hashlib import md5
-from django.http import Http404
 
-from .repository import URLRepository
+from django.shortcuts import get_object_or_404
 
-url_repository = URLRepository()
+from main.models import URL
 
 
 class URLController:
@@ -11,28 +10,22 @@ class URLController:
         """
             Method to get all user shortened links
         """
-        return url_repository.read(author_id=user_pk)
+        user_urls = URL.objects.filter(author_id=user_pk)
+        return user_urls
 
-    def get_full_url(self, url_slug: 'shorted_url') -> 'url':
+    def get_full_url(self, url_slug: 'shorted_url') -> 'full_url':
         """
             Method for obtaining a full link
         """
-        try:
-            __url = url_repository.read(shorted_url=url_slug)
-            return __url.first().full_url
-        except AttributeError:
-            raise Http404()
+        _url = get_object_or_404(URL, shorted_url=url_slug)
+        return _url.full_url
 
-    def create_new_url(self, full_url: 'url', author_id=None) -> 'url':
+    def get_or_create_url(self, full_url: 'url', author_id=None) -> 'shorted_url':
         """
             Method for creating a new link
         """
-        try:
-            _potential_url = url_repository.read(full_url=full_url)
-            return _potential_url.first().shorted_url
-        except AttributeError:
-            _url_hash = md5(full_url.encode()).hexdigest()[:5]
-            _url = url_repository.create(shorted_url=_url_hash,
-                                         full_url=full_url,
-                                         author_id=author_id)
-            return _url.shorted_url
+        _url_hash = md5(full_url.encode()).hexdigest()[:5]
+        _url, _created = URL.objects.get_or_create(full_url=full_url,
+                                                   defaults={'shorted_url': _url_hash,
+                                                             'author_id': author_id})
+        return _url.shorted_url
