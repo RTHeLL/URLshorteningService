@@ -42,26 +42,26 @@ class LoginUser(LoginView):
 
 def index(request: 'django_reqeust') -> 'html':
     if request.method == 'POST':
-        _form = URLGenerateForm(request.POST)
-        if _form.is_valid():
-            _shorted_url = url_controller.create_new_url(full_url=_form.cleaned_data['full_url'],
-                                                         author_id=request.user.pk)
-            messages.success(request, request.build_absolute_uri(_shorted_url))
+        form = URLGenerateForm(request.POST)
+        if form.is_valid():
+            shorted_url = url_controller.get_or_create_url(full_url=form.cleaned_data['full_url'],
+                                                           author_id=request.user.pk)
+            messages.success(request, request.build_absolute_uri(shorted_url))
     else:
-        _form = URLGenerateForm()
-    return render(request, 'main/generate.html', {'form': _form})
+        form = URLGenerateForm()
+    return render(request, 'main/generate.html', {'form': form})
 
 
 @login_required(login_url='login')
 def urls_list(request: 'django_reqeust') -> 'html':
-    _urls = url_controller.get_urls_by_user_pk(request.user.pk)
-    return render(request, 'main/urls.html', {'urls': _urls})
+    urls = url_controller.get_urls_by_user_pk(request.user.pk)
+    return render(request, 'main/urls.html', {'urls': urls})
 
 
 def redirect_original(request: 'django_reqeust', url_slug: 'slug') -> '302':
-    _to_url = url_controller.get_full_url(url_slug=url_slug)
+    to_url = url_controller.get_full_url(url_slug=url_slug)
     try:
-        return redirect(_to_url)
+        return redirect(to_url)
     except NoReverseMatch:
         raise Http404()
 

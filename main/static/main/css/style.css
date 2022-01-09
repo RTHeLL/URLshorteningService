@@ -22,6 +22,10 @@ body {
   font-weight: 400;
 }
 
+.container .no-urls {
+  white-space: pre;
+}
+
 .errorlist {
   text-decoration: none;
   list-style-type: disclosure-closed;
